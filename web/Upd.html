@@ -18,18 +18,7 @@
 	</p>
 	<table border="3px" border-color="silver" align="center" class="genericText shadowLight">
 		<tr><td><input type="button" id="rst" value="RESET"></td><td id="day" style="text-align:center">On?</td></tr>
-		<tr><td>04_06</td><td class="sced"><input type="radio" value="on"  id="aa"  name="04_06"><input type="radio" value="off" id="a" name="04_06" style="display:none"></td></tr>
-		<tr><td>06_08</td><td class="sced"><input type="radio" value="on"  id="bb" name="06_08"><input type="radio" value="off" id="b" name="06_08" style="display:none"></td></tr>
-		<tr><td>08_10</td><td class="sced"><input type="radio" value="on"  id="cc" name="08_10"><input type="radio" value="off" id="c" name="08_10" style="display:none"></td></tr>
-		<tr><td>10_12</td><td class="sced"><input type="radio" value="on"  id="dd" name="10_12"><input type="radio" value="off" id="d" name="10_12" style="display:none"></td></tr>
-		<tr><td>12_14</td><td class="sced"><input type="radio" value="on"  id="ee" name="12_14"><input type="radio" value="off" id="e" name="12_14" style="display:none"></td></tr>
-		<tr><td>14_16</td><td class="sced"><input type="radio" value="on"  id="ff" name="14_16"><input type="radio" value="off" id="f" name="14_16" style="display:none"></td></tr>
-		<tr><td>16_18</td><td class="sced"><input type="radio" value="on"  id="gg" name="16_18"><input type="radio" value="off" id="g" name="16_18" style="display:none"></td></tr>
-		<tr><td>18_20</td><td class="sced"><input type="radio" value="on"  id="hh" name="18_20"><input type="radio" value="off" id="h" name="18_20" style="display:none"></td></tr>
-		<tr><td>20_22</td><td class="sced"><input type="radio" value="on"  id="ii" name="20_22"><input type="radio" value="off" id="i" name="20_22" style="display:none"></td></tr>
-		<tr><td>22_24</td><td class="sced"><input type="radio" value="on"  id="jj" name="22_24"><input type="radio" value="off" id="j" name="22_24" style="display:none"></td></tr>
-		<tr><td>24_02</td><td class="sced"><input type="radio" value="on"  id="kk" name="24_02"><input type="radio" value="off" id="k" name="24_02" style="display:none"></td></tr>
-		<tr><td>02_04</td><td class="sced"><input type="radio" value="on"  id="ll" name="02_04"><input type="radio" value="off" id="l" name="02_04" style="display:none"></td></tr>
+		<!--add via js-->
 	</table>
 <div class="hdderWrapper genericText shadowLight">
 <input type="text" name="*Check" id="x" style="display:none" value="0000">
@@ -45,32 +34,50 @@
 <script lang="javascript">
 var flag=true;
 function rst(){
-if(flag){document.getElementById("a").checked=true;
-document.getElementById("b").checked=true;
-document.getElementById("c").checked=true;
-document.getElementById("d").checked=true;
-document.getElementById("e").checked=true;
-document.getElementById("f").checked=true;
-document.getElementById("g").checked=true;
-document.getElementById("h").checked=true;
-document.getElementById("i").checked=true;
-document.getElementById("j").checked=true;
-document.getElementById("k").checked=true;
-document.getElementById("l").checked=true;}
-else{document.getElementById("aa").checked=true;
-document.getElementById("bb").checked=true;
-document.getElementById("cc").checked=true;
-document.getElementById("dd").checked=true;
-document.getElementById("ee").checked=true;
-document.getElementById("ff").checked=true;
-document.getElementById("gg").checked=true;
-document.getElementById("hh").checked=true;
-document.getElementById("ii").checked=true;
-document.getElementById("jj").checked=true;
-document.getElementById("kk").checked=true;
-document.getElementById("ll").checked=true;}
+	//make this through arrays and loop
+// if(flag){
+// 	document.getElementById("a").checked=true
+// 	document.getElementById("b").checked=true;
+// 	document.getElementById("c").checked=true;
+// 	document.getElementById("d").checked=true;
+// 	document.getElementById("e").checked=true;
+// 	document.getElementById("f").checked=true;
+// 	document.getElementById("g").checked=true;
+// 	document.getElementById("h").checked=true;
+// 	document.getElementById("i").checked=true;
+// 	document.getElementById("j").checked=true;
+// 	document.getElementById("k").checked=true;
+// 	document.getElementById("l").checked=true;
+// }
+// else{
+// 	document.getElementById("aa").checked=true;
+// 	document.getElementById("bb").checked=true;
+// 	document.getElementById("cc").checked=true;
+// 	document.getElementById("dd").checked=true;
+// 	document.getElementById("ee").checked=true;
+// 	document.getElementById("ff").checked=true;
+// 	document.getElementById("gg").checked=true;
+// 	document.getElementById("hh").checked=true;
+// 	document.getElementById("ii").checked=true;
+// 	document.getElementById("jj").checked=true;
+// 	document.getElementById("kk").checked=true;
+// 	document.getElementById("ll").checked=true;
+// }
 flag=!flag;
 }
+// <tr><td>04_06</td><td class="sced"><input type="radio" value="on"  id="aa"  name="04_06"><input type="radio" value="off" id="a" name="04_06" style="display:none"></td></tr>
+// 		<tr><td>06_08</td><td class="sced"><input type="radio" value="on"  id="bb" name="06_08"><input type="radio" value="off" id="b" name="06_08" style="display:none"></td></tr>
+// 		<tr><td>08_10</td><td class="sced"><input type="radio" value="on"  id="cc" name="08_10"><input type="radio" value="off" id="c" name="08_10" style="display:none"></td></tr>
+// 		<tr><td>10_12</td><td class="sced"><input type="radio" value="on"  id="dd" name="10_12"><input type="radio" value="off" id="d" name="10_12" style="display:none"></td></tr>
+// 		<tr><td>12_14</td><td class="sced"><input type="radio" value="on"  id="ee" name="12_14"><input type="radio" value="off" id="e" name="12_14" style="display:none"></td></tr>
+// 		<tr><td>14_16</td><td class="sced"><input type="radio" value="on"  id="ff" name="14_16"><input type="radio" value="off" id="f" name="14_16" style="display:none"></td></tr>
+// 		<tr><td>16_18</td><td class="sced"><input type="radio" value="on"  id="gg" name="16_18"><input type="radio" value="off" id="g" name="16_18" style="display:none"></td></tr>
+// 		<tr><td>18_20</td><td class="sced"><input type="radio" value="on"  id="hh" name="18_20"><input type="radio" value="off" id="h" name="18_20" style="display:none"></td></tr>
+// 		<tr><td>20_22</td><td class="sced"><input type="radio" value="on"  id="ii" name="20_22"><input type="radio" value="off" id="i" name="20_22" style="display:none"></td></tr>
+// 		<tr><td>22_24</td><td class="sced"><input type="radio" value="on"  id="jj" name="22_24"><input type="radio" value="off" id="j" name="22_24" style="display:none"></td></tr>
+// 		<tr><td>24_02</td><td class="sced"><input type="radio" value="on"  id="kk" name="24_02"><input type="radio" value="off" id="k" name="24_02" style="display:none"></td></tr>
+// 		<tr><td>02_04</td><td class="sced"><input type="radio" value="on"  id="ll" name="02_04"><input type="radio" value="off" id="l" name="02_04" style="display:none"></td></tr>
+	
 			 rst();
 			 var x=document.getElementById("price");
 			 var y=document.getElementById("suply");
