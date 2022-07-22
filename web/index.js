@@ -39,25 +39,30 @@ till.onfocus = function () {
 };
 document.f1.addEventListener('submit',check);
 function Do() {
+  let listE=document.querySelector("#selF");
+  let lst=0.0;
   var slot = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k","l"];
-   // add table elements through iteration
-  // <tr><td>Period</td><td id="day" style="text-align:center">On?</td></tr>
-	// 					<tr><td>04_06</td><td class="sced"><input type="checkbox" class="box" id="a"></td></tr>
-	// 					<tr><td>06_08</td><td class="sced"><input type="checkbox" class="box" id="b"></td></tr>
-	// 					<tr><td>08_10</td><td class="sced"><input type="checkbox" class="box" id="c"></td></tr>
-	// 					<tr><td>10_12</td><td class="sced"><input type="checkbox" class="box" id="d"></td></tr>
-	// 					<tr><td>12_14</td><td class="sced"><input type="checkbox" class="box" id="e"></td></tr>
-	// 					<tr><td>14_16</td><td class="sced"><input type="checkbox" class="box" id="f"></td></tr>
-	// 					<tr><td>16_18</td><td class="sced"><input type="checkbox" class="box" id="g"></td></tr>
-	// 					<tr><td>18_20</td><td class="sced"><input type="checkbox" class="box" id="h"></p></td></tr>
-	// 					<tr><td>20_22</td><td class="sced"><input type="checkbox" class="box" id="i"></td></tr>
-	// 					<tr><td>22_24</td><td class="sced"><input type="checkbox" class="box" id="j"></td></tr>
-	// 					<tr><td>24_2</td><td class="sced"><input type="checkbox" class="box" id="k"></p></tr>
-	// 					<tr><td>02_04</td><td class="sced"><input type="checkbox" class="box" id="l"></p></tr>
-  for (let i = 0; i < 12; i++) {
-    var x = document.getElementById(slot[i]);
-    x.checked = Boolean(scedule[i]);
-    x.disabled = true;
+  let table=document.getElementById("scedT");
+  let c=0;
+  for(let x=0;x<12;x++){
+    let tr=document.createElement("tr");
+    let td1=document.createElement("td");
+    let td2=document.createElement("td");
+    let ip=document.createElement("input");
+    let opt=document.createElement("option");
+    opt.value=lst;
+    listE.appendChild(opt);
+    lst+=0.5;
+    ip.type="checkbox";
+    ip.setAttribute("id",slot[x]);
+    ip.checked = Boolean(scedule[x]);
+    ip.disabled = true;
+    td1.innerText=((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2);
+    c+=2;
+    td2.appendChild(ip);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    table.append(tr);
   }
   if (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -69,18 +74,6 @@ function Do() {
   } else {
     document.getElementById("bdy").style = "overflow: hidden;";
   }
-  // add inner html array to selF
-  // <option value=0.0></option>
-	// 						<option value=0.3></option>
-	// 						<option value=1.0></option>
-	// 						<option value=1.3></option>
-	// 						<option value=2.0></option>
-	// 						<option value=2.3></option>
-	// 						<option value=3.0></option>
-	// 						<option value=4.0></option>
-	// 						<option value=6.0></option>
-	// 						<option value=7.0></option>
-	// 						<option value=8.0></option>
-	// 						<option value=10.0></option>
+  
 }
 window.onload = Do;

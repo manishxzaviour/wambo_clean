@@ -79,18 +79,11 @@ flag=!flag;
 // 		<tr><td>02_04</td><td class="sced"><input type="radio" value="on"  id="ll" name="02_04"><input type="radio" value="off" id="l" name="02_04" style="display:none"></td></tr>
 	
 			 rst();
-			 var x=document.getElementById("price");
-			 var y=document.getElementById("suply");
 			 var SSID_I=document.getElementById("ssid");
 			 var PWD_I=document.getElementById("pwd");
 			 document.getElementById("rst").onclick=function(){rst();};
 			 function ud(){
 				 document.getElementById("x").value="1111";
-				 if(isNaN(parseFloat((x.value=='')?"0":x.value))||isNaN(parseFloat((y.value=='')?"0":y.value))){
-					alert("input should be a number; electricity");
-					x.value=null;
-					y.value=null;
-				}
 			 }
 			 function check(){
 				if(document.getElementById("x").value=="1111"){

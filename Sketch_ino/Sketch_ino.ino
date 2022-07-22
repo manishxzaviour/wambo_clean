@@ -421,4 +421,8 @@ void loop()
  if(stat){
  digitalWrite(pin,HIGH);}
  else{digitalWrite(pin,LOW);}
+ if(digitalRead(btn) == HIGH){
+	ESP.restart();
+ }
 }
+
