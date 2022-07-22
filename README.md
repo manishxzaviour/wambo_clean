@@ -4,7 +4,8 @@
 * **base from v2.2;**
 * **optimize in js;**
 * **possible optimization in C#;**
-* ##Git clean steps##
+-----------------------------
+* Git clean steps
 	* create online rep
 		* add readme and copy link
     * clone remote to local
