@@ -4,8 +4,8 @@
 * **base from v2.2;**
 * **optimize in js;**
 * **possible optimization in C#;**
------------------------------
-* Git clean steps
+--------------------------------------
+* ##Git clean steps##
 	* create online rep
 		* add readme and copy link
     * clone remote to local
@@ -19,4 +19,13 @@
 		* git commit -m MSG
 	* push to remote
 		* git push
+	* push to remote
+		* git push
+	* branches 
+		* git branch -b BR_name
+		* git checkout BR_name
+		* short git checkout -b BR_name
+		* commit changes to branch
+		* git push origin BR_name
+		* git checkout 'main'
 			
