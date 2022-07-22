@@ -1,0 +1,65 @@
+abt 
+        /css  ok
+draw
+-
+fromp
+        /progcss ok
+index
+/css        ok
+/indexjs js ok
+/Sced js    ok
+/sm/ html   ok
+/abt/ html  ok
+/raw/ xml   ok
+/msg/ html  ok
+/wambo post ok
+/report/ html   ok
+/fromp/ html    ok
+/upd/ html      ok
+
+index.js
+/Sced js    ok
+
+map
+/           ok
+/sm/        ok
+/raw/       ok
+/msg/       ok
+/upd/       ok
+# wambo     ok
+/report/    ok
+/fromp/     ok
+/abt/       ok
+/css        ok
+/progcss    ok
+
+memmo
+/css        ok
+/msg/a      ok
+/memmo text ok
+
+
+report
+<script type="module" src="/tontoff" defer></script>				ok
+		<script type="module" src="/UsageData" defer></script>		ok
+		<script type="module" src="/SavingsData" defer></script>	ok
+		<script type="module" src="/draw" defer></script>			ok
+		<script type="module" src="/send" defer></script>			ok
+
+SavingsData
+/send  js			ok
+
+send 
+/draw js			ok
+/raw/  xml		ok
+/ref post		ok
+
+tontoff
+/send  js		ok
+
+upd 
+/css		ok
+/upd/a		ok
+
+UsageData
+/send js	ok

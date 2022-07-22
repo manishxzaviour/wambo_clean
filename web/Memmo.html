@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="./index.css">
+<title>
+MeMMo
+</title>
+</head>
+<body style="background-color:rgba(0,255,160,0.6)">
+<div class="hdder">
+	<h2 align="center"><a href="/"class="hdderWrapper">WamBo</a></h2>
+</div>
+<form action="/msg/a"method="post">
+<div style="background-color:rgba(0,255,160,0.6);background-size: cover;" class="shadowLight" >
+<button id="x">
+<u>MEMMO</u>
+</button>
+</p>
+</div>
+<textarea class="genericText" name="memmo" rows="10" cols="100" placeholder="Write your notes here" id="memmo">
+</textarea>
+</form>
+<script>
+let x=document.getElementById('x');
+let v="font-size:30px;font-family:'Pacifico', cursive;background-color:rgba(240,165,165);display:inline-block;padding:5px;border-radius:8px;mix-blend-mode: screen;color: black;height:60px;"
+x.style=v;
+x.onmouseover=function(){x.style="border:4px dotted gray;"+v}
+x.onmouseout=function(){x.style=v}
+var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("memmo").innerHTML=this.responseText;
+    }
+  };
+  xmlhttp.open("GET", "/memmo", true);
+  xmlhttp.send();
+</script>
+</body>
+</html>
