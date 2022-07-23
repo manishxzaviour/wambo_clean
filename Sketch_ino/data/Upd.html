@@ -64,7 +64,8 @@ window.onload=()=>{
 	ip2.checked=true;
 	ip2.setAttribute("id",slot[x]+slot[x]);
 	ip2.setAttribute("name",((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2));
-	ip2.style="display:none"
+	ip2.style="display:none";
+	ip1.onclick=()=>{ip1.checked=false;ip2.checked=true;};
 	//
     td1.innerText=((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2);
     c+=2;
