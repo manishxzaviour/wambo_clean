@@ -35,3 +35,31 @@ very imortant almost lost my data
 
 .gitignore on branches properly
 vs code is nice using git
+
+___________________________________________________________
+
+conlcusion :
+
+a progect has a master / main file
+you work on the main file 
+you do all work on main file 
+
+once basic structure is formed you push to online rep
+
+you make newer moddification on working directory
+you stage and commit
+you push
+
+branches are made when everything is working
+
+version controll
+
+make atomic commits 
+
+use switch to change branches
+use revert to go to commit
+use checkout to revert to file in commit
+
+use diff
+
+use HEAD and checkout to navigate structure tree
