@@ -1,0 +1,28 @@
+
+body{
+margin:0px;
+background-color:rgba(255,185,185,10%);
+font-family:arial;
+overflow:hidden;
+}
+.hdder{
+background-color:rgba(25,255,255,65%); 
+padding:5px; 
+margin:0; 
+box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.hdderWrapper{
+font-family: 'Roboto Slab', arial,serif;
+text-decoration: none;
+color:rgba(80,120,120);
+font-size:30px;
+text-align:center;
+}
+.shadowLight{
+	box-shadow:0 4px 5px 0 rgba(100, 100, 100, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.genericText{
+font-size:20px;
+font-family:'Rubik',sans-serif;
+display:inline-block;
+}
