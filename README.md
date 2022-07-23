@@ -51,6 +51,9 @@ you stage and commit
 you push
 
 branches are made when everything is working
+git rm --cached file 
+^ to untrack file without deletion
+use .gitignore after this
 
 version controll
 
