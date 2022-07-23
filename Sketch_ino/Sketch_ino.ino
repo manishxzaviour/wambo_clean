@@ -230,6 +230,7 @@ void hGot()
 		Serial.println("GOT");
 		GotData = server.arg("plain");
 		rFile("/Ok.html", 0);
+    delay(1000);
 		from = GotData.substring(GotData.indexOf("1=") + 2, GotData.indexOf("&")).toFloat(); // from1=00&for2=00
 		For = GotData.substring(GotData.indexOf("2=") + 2, GotData.indexOf("&T")).toFloat(); // from1=0.0&for2=8.0&Time
 		// from1=0.0&for2=8.0&d=16-06-2022&t=Sat+Jul+16+2022+15%3A10%3A02
@@ -257,8 +258,7 @@ void hUpdGot()
 	{
 		Serial.println("GOT");
 		GotData = server.arg("plain");
-		// 04_06=on&06_08=on&08_10=on&10_12=on&12_14=on&14_16=on&16_18=on&18_20=on&20_22=on&22_24=on&24_02=on&*Check=1111&ElectricPrice=10&ElectricSupply=20&SSID=000&PWD=12345678&reset=N
-		char s[][13] = {"04_06", "06_08", "08_10", "10_12", "12_14", "14_16", "16_18", "18_20", "20_22", "22_24", "24_02", "02_04","*Check"};
+		char s[][13] = {"00_02", "02_04", "04_06", "06_08", "08_10", "10_12", "12_14", "14_16", "16_18", "18_20", "20_24", "02_04","*Check"};
 		for (int x = 0; x < 12; x++)
 		{
 			if (GotData.substring(GotData.indexOf(s[x]) + 6, GotData.indexOf(s[x + 1]) - 1) == "on")
@@ -291,6 +291,8 @@ void hUpdGot()
 		wFile(2, " ");
 		rFile("/Ok.html", 0);
 	}
+ delay(1000);
+ ESP.restart();
 }
 void hCss()
 {
@@ -331,6 +333,37 @@ void handleRequest()
   server.on("/stat", hStat);
 	server.onNotFound(hNF);
 }
+void getDate(){
+  if ((WiFi.status() == WL_CONNECTED))
+  {
+    WiFiClient client;
+    HTTPClient http;
+    String x;
+    stat=true;
+    if (http.begin(client, "http://worldtimeapi.org/api/timezone/Asia/Kolkata"))
+    {
+      int httpCode = http.GET();
+      if (httpCode > 0)
+      {
+        x = http.getString();
+        //"datetime":"2022-07-17T14:49:38.276886+05:30
+        //"datetime":"2022-07-17T11:09:39.686372+05:30
+        x = x.substring(x.indexOf("datetime") + 22, x.indexOf("+05:30") - 10);
+        timeScedM = x.substring(0, 3).toInt() * 60 + x.substring(3, 5).toInt();
+        Serial.println(timeScedM);
+        flag=true;
+      }
+      else
+      {
+        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      }
+      http.end();
+    }
+    else
+    {
+      Serial.printf("[HTTP} Unable to connect\n");
+    }
+  }}
 void setup()
 {
 	setp = millis();
@@ -371,36 +404,7 @@ void setup()
 	{
 		wifi();
 	}
-	if ((WiFi.status() == WL_CONNECTED))
-	{
-		WiFiClient client;
-		HTTPClient http;
-		String x;
-    stat=true;
-		if (http.begin(client, "http://worldtimeapi.org/api/timezone/Asia/Kolkata"))
-		{
-			int httpCode = http.GET();
-			if (httpCode > 0)
-			{
-				x = http.getString();
-				//"datetime":"2022-07-17T14:49:38.276886+05:30
-				//"datetime":"2022-07-17T11:09:39.686372+05:30
-				x = x.substring(x.indexOf("datetime") + 22, x.indexOf("+05:30") - 10);
-				timeScedM = x.substring(0, 3).toInt() * 60 + x.substring(3, 5).toInt();
-				Serial.println(timeScedM);
-        flag=true;
-			}
-			else
-			{
-				Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-			}
-			http.end();
-		}
-		else
-		{
-			Serial.printf("[HTTP} Unable to connect\n");
-		}
-	}
+ getDate();
  Serial.println("scedule");
  for(int x=0;x<12;x++){
   Serial.print(scedule[x]);
@@ -416,13 +420,10 @@ void loop()
   for(int x=0;x<13;x++){
     if((y-scedP[x])<120&&(y-scedP[x])>0){
       sced(x);
+      if(x==12){getDate();}
       }
   }}
  if(stat){
  digitalWrite(pin,HIGH);}
  else{digitalWrite(pin,LOW);}
- if(digitalRead(btn) == HIGH){
-	ESP.restart();
- }
 }
-
