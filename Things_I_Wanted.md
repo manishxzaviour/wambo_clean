@@ -1,4 +1,4 @@
-#steps for propper git i wanted :
+# steps for propper git i wanted :
 
 1 main branch would be sketch_ino and related data only
 2 web would be branch for live servers only
