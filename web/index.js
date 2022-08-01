@@ -71,6 +71,8 @@ function Do() {
   ) {
     document.getElementById("bdy").style =
       "overflow:auto;  overflow-x: hidden;";
+      document.getElementById("wrapper2").style.display = "none";
+
   } else {
     document.getElementById("bdy").style = "overflow: hidden;";
   }

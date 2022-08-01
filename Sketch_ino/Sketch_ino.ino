@@ -10,19 +10,21 @@
 String ssid;
 String password;
 const char *ssid_ap = "Wambo_ap";
-const int pin = 5;
+const int pin = 12;
 const int btn = 14;
-const int led = 12;
+const int led = LED_BUILTIN;
 bool stat=true;
 bool flag=false;
 float RemT = 0;
-double CT = millis();
+double CT ;
+double setupT ;
+double refresh1    ;
 float from;
 float For;
 String date;
 String timeH;
 int timeScedM;
-int scedP[]={60*4,60*6,60*8,60*10,60*12,60*14,60*16,60*18,60*20,60*22,60*24,60*2,60*4};
+int scedP[]={0,2,4,6,8,6,10,12,14,16,18,20,22,24};
 int T = 0; // h*24*60*60*1000+m*60*1000
 int scedule[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0};
 String GotData;
@@ -31,9 +33,9 @@ ESP8266WebServer server(80);
 
 void Blink()
 {
-	digitalWrite(led, HIGH);
-	delay(500);
 	digitalWrite(led, LOW);
+	delay(500);
+	digitalWrite(led, HIGH);
 	delay(500);
 }
 void wifi()
@@ -258,12 +260,13 @@ void hUpdGot()
 	{
 		Serial.println("GOT");
 		GotData = server.arg("plain");
-		char s[][13] = {"00_02", "02_04", "04_06", "06_08", "08_10", "10_12", "12_14", "14_16", "16_18", "18_20", "20_24", "02_04","*Check"};
-		for (int x = 0; x < 12; x++)
+		char s[][13] = {"00_02", "02_04", "04_06", "06_08", "08_10", "10_12", "12_14", "14_16", "16_18", "18_20", "20_22","22_24","*Check"};
+		for (int x = 0; x < 13; x++)
 		{
 			if (GotData.substring(GotData.indexOf(s[x]) + 6, GotData.indexOf(s[x + 1]) - 1) == "on")
 			{
 				scedule[x] = 1;
+             Serial.println(s[x]); 
 			}
 			else
 			{
@@ -285,7 +288,6 @@ void hUpdGot()
 			};
 			file.close();
 		}
-		Serial.println(GotData.substring(GotData.indexOf("Check") + 6, GotData.indexOf("ElectricPrice") - 1));
 		Serial.println(GotData);
 		// for(int x=0;x<11;x++){Serial.print(scedule[x]);}
 		wFile(2, " ");
@@ -350,6 +352,7 @@ void getDate(){
         //"datetime":"2022-07-17T11:09:39.686372+05:30
         x = x.substring(x.indexOf("datetime") + 22, x.indexOf("+05:30") - 10);
         timeScedM = x.substring(0, 3).toInt() * 60 + x.substring(3, 5).toInt();
+        Serial.println(".................................");
         Serial.println(timeScedM);
         flag=true;
       }
@@ -404,7 +407,7 @@ void setup()
 	{
 		wifi();
 	}
- getDate();
+ setupT=millis();
  Serial.println("scedule");
  for(int x=0;x<12;x++){
   Serial.print(scedule[x]);
@@ -414,16 +417,20 @@ void setup()
 }
 void loop()
 {
+    refresh1=millis();
+    if((refresh1-setupT)>5*60*1000){
+      getDate(); 
+      setupT=millis();
+      }
 	server.handleClient();
 	if(flag){
 	  int y=timeScedM+millis()/(1000*60);
   for(int x=0;x<13;x++){
-    if((y-scedP[x])<120&&(y-scedP[x])>0){
+    if((y-scedP[x]*60)<120&&(y-scedP[x]*60)>0){
       sced(x);
       if(x==12){getDate();}
       }
   }}
- if(stat){
- digitalWrite(pin,HIGH);}
+ if(stat){digitalWrite(pin,HIGH);}
  else{digitalWrite(pin,LOW);}
 }

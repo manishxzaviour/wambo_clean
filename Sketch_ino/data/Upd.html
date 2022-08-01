@@ -11,7 +11,7 @@
 		<h2 align="center"><a href="/"class="hdderWrapper">WamBo</a></h2></div>
 	<br>
 	<br>
-	<form action="/upd/a" method="post" onsubmit="return(check());">
+	<form action="/upd/a" method="POST" onsubmit="return(check());">
 	<div align="center">
 	<p class="genericText">
 		<input type="submit" value="UPDATE" style="font-size:20px;background-color:rgb(55, 232, 200);display:inline-block;padding:5px;border-radius:8px;mix-blend-mode: screen;color: black;height:35px;">
@@ -38,10 +38,12 @@ function rst(){
 	if(flag){
 		slot.forEach((a)=>{
 		document.getElementById(a+a).checked=true;
+		document.getElementById(a).checked=false;
 		});
 	}
 	else{slot.forEach((a)=>{
 			document.getElementById(a).checked=true;
+			document.getElementById(a+a).checked=false;
 		});}
 flag=!flag;
 }
@@ -54,18 +56,20 @@ window.onload=()=>{
     let td2=document.createElement("td");
     let ip1=document.createElement("input");
 	let ip2=document.createElement("input");
-    ip1.type="radio";
+    ip1.type="checkbox";
 	ip1.value="on";
 	ip1.setAttribute("id",slot[x]);
 	ip1.setAttribute("name",((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2));
+	ip1.classList.add("box");
 	//
-	ip2.type="radio";
+	ip2.type="checkbox";
 	ip2.value="off";
 	ip2.checked=true;
 	ip2.setAttribute("id",slot[x]+slot[x]);
 	ip2.setAttribute("name",((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2));
 	ip2.style="display:none";
-	ip1.onclick=()=>{ip1.checked=false;ip2.checked=true;};
+	ip2	.classList.add("box");
+	ip1.onclick=()=>{ip2.checked=!ip2.checked;};
 	//
     td1.innerText=((c<10)?("0"+c):c)+"_"+((c+2<10)?("0"+(c+2)):c+2);
     c+=2;
