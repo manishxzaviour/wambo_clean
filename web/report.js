@@ -1,4 +1,4 @@
-let src=["./draw.js","./tontoff.js","./UsageData.js","./SavingsData.js","./send.js"];
+let src=["./draw.js","./tontoff.js","./UsageData.js","./SavingsData.js"];
 		function Do(){
 			console.log("internet");
 			let x=document.createElement("script");
@@ -11,7 +11,6 @@ let src=["./draw.js","./tontoff.js","./UsageData.js","./SavingsData.js","./send.
 				document.body.appendChild(x);
 			});
 			},500);
-			
 		}
 		$(document).ready(function () {
   		try {

@@ -1,6 +1,6 @@
 import scedule from './Sced.js';
 var d = new Date();
-var date=String(d.getDate())+'-'+String((d.getMonth()<10)?'0'+String(d.getMonth()):d.getMonth())+'-'+String(d.getFullYear());
+var date=String(String((d.getDate()<10)?'0'+String(d.getDate()):d.getDate()))+'-'+String(((d.getMonth()<10)?'0'+String(d.getMonth()):d.getMonth())+1)+'-'+String(d.getFullYear());
 document.getElementById("d").value=date;
 function refT() {
   var ref = String(new Date());
@@ -65,17 +65,17 @@ function Do() {
     table.append(tr);
   }
   if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    )
+    window.innerWidth < 600
   ) {
     document.getElementById("bdy").style =
       "overflow:auto;  overflow-x: hidden;";
-      document.getElementById("wrapper2").style.display = "none";
-
+      document.getElementById("wrapper2").style = "display:block;height:20px;width:100px";
+      document.getElementById("wrapper2").innerHTML = "<a href=\"/rep/\" class=\"genericText\">Report</a>";
   } else {
     document.getElementById("bdy").style = "overflow: hidden;";
+      let y=document.createElement("script");
+      y.src="./report.js";
+      document.body.appendChild(y);
   }
-  
 }
 window.onload = Do;

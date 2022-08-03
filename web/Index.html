@@ -4,8 +4,10 @@
 		<title>wambo</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="./index.css">
+		<script type="module" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" async></script>
 		<script type="module" src="./index.js"	 async></script>
 		<script type="module" src="./Sced.js" async></script>
+		<script src="./send.js" async></script>
 		<style>
 			#titlle {float:right;margin:0px 10px;background-color:rgba(255,185,25,80%);border-radius:15px;padding:7px;}
 			#titlle li{display:inline-block; padding:0px 5px;padding-top:4px;}
@@ -44,16 +46,16 @@
 		</ul>
 		</div>
 		<div id="container2">
-		<form name="f1" action="/wambo" 	 onsubmit="return(check());">
+		<form name="f1" action="/wambo" onsubmit="return(check());">
 				<table id="input" border="3px" class="shadowLight">
 					<tr>
 						<th>
-						    <label>From:&nbsp;</label><input list="selF" type="number" min="0" maxlength="6"name="from1" id="fromIP" style="width:50%;" placeholder="0.0" value="0.0">
-							<datalist id="selF" >
+						    <label>From:&nbsp;</label><input type="number" step="any" list="selF" name="from1" id="fromIP" style="width:50%;" placeholder="0.0" min="0.0001" value="0.0">
+							<datalist id="selF">
 							</datalist>
 					</th></tr>
-					<tr><td>&nbsp;</td><td><input type="submit"  value="&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;" id="send"></td></tr>
-					<tr><th><label>&nbsp;For:&nbsp;&nbsp;&nbsp;</label><input list="selF" type="number" min="0" name="for2" id="forIP" placeholder="8.0" maxlength="6" style="width:50%;" value="8.0"></th></tr>
+					<tr><td>&nbsp;</td><td><input type="submit"  value="&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;" id="send" ></td></tr>
+					<tr><th><label>&nbsp;For:&nbsp;&nbsp;&nbsp;</label><input type="number" step="any" min="0.0001" list="selF" name="for2" id="forIP"   placeholder="8.0" value="8.0" style="width:50%;"></th></tr>
 				</table>
 				<div id="container" align="center">
 					<table border="2px" border-color="silver"style="border-style: dotted" class="genericText" id="scedT">
@@ -71,9 +73,6 @@
 		<input id="time" type="text" class="shadowLight genericText" disabled="true">
 		<a href="./upd.html" id="updi" class="hdderWrapper" style="height: 25px;">^</a>			
 	</form>
-	<div id="scr"></div>
 	</body>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
-	<script src="./report.js">		
 	</script>
 </html>

@@ -3,6 +3,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPClient.h>
+#include <ESP8266mDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
   IPAddress staticIP(192, 168, 0, 184); // static ip creating problems
   IPAddress subnet(255, 255, 0, 0);
   IPAddress gateway(192, 168, 0, 1);
@@ -17,18 +20,29 @@ bool stat=true;
 bool flag=false;
 float RemT = 0;
 double CT ;
-double setupT ;
-double refresh1    ;
+double setP;
+double startT ;
+double refresh1;    
 float from;
 float For;
 String date;
 String timeH;
 int timeScedM;
-int scedP[]={0,2,4,6,8,6,10,12,14,16,18,20,22,24};
+int scedP[]={0,2,4,6,8,10,12,14,16,18,20,22,24};
 int T = 0; // h*24*60*60*1000+m*60*1000
 int scedule[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0};
 String GotData;
-double setp;
+int EleRate;
+int EleSupply;
+float ton;
+float toff;
+String xS = "<";
+String xC = ">";
+String xE = "</";
+String xPC = "</data>";
+float savedE = 0;
+float savedM = 0;
+char xCh[][10] = {"D", "from", "for", "ton", "toff", "rate", "supply", "savedE", "savedM", "date"};
 ESP8266WebServer server(80);
 
 void Blink()
@@ -55,12 +69,48 @@ void wifi()
 void ap()
 {
 	WiFi.mode(WIFI_AP);
-	WiFi.softAPConfig(staticIP, gateway, subnet);
+  WiFi.softAPConfig(staticIP, gateway, subnet);
 	WiFi.softAP(ssid_ap);
 	Serial.println("AP_mode:");
-	Serial.print(WiFi.localIP());
+	Serial.print(WiFi.softAPIP());
 	Blink();
 	Blink();
+}
+void ota()
+{
+	ArduinoOTA.setHostname("wambo");
+	ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_FS
+      type = "filesystem";
+    }
+	FS.end();
+    Serial.println("Start updating " + type);
+  });
+  ArduinoOTA.onEnd([]() {
+    Serial.println("\nEnd");
+	ESP.restart();
+  });
+  ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  });
+  ArduinoOTA.onError([](ota_error_t error) {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) {
+      Serial.println("Auth Failed");
+    } else if (error == OTA_BEGIN_ERROR) {
+      Serial.println("Begin Failed");
+    } else if (error == OTA_CONNECT_ERROR) {
+      Serial.println("Connect Failed");
+    } else if (error == OTA_RECEIVE_ERROR) {
+      Serial.println("Receive Failed");
+    } else if (error == OTA_END_ERROR) {
+      Serial.println("End Failed");
+    }
+  });
+  ArduinoOTA.begin();
 }
 void rFile(char *f, int a)
 { // file name  0,1,2,3 <html,css,js,text>
@@ -86,7 +136,10 @@ void rFile(char *f, int a)
 		case 3:
 			server.send(200, "text/plain", s);
 			break;
-		}
+   		case 4:
+    		 server.send(200, "text/xml", s+"</data>");
+    		 break;
+  		  }
 		file.close();
 	}
 	else
@@ -98,6 +151,53 @@ void wFile(int m, String d)
 { // write file f d 1,2, txt js
 	switch (m)
 	{
+	case 0:
+	{
+		File file = SPIFFS.open("/Data.xml", "r");
+		if (file)
+		{
+		String s;
+		while (file.available())
+		{
+			s += char(file.read());
+		}
+		s+="\n"+(xS + xCh[0] + xC);
+		s+="\n"+(xS + xCh[1] + xC);
+		s+=(from);
+		s+=(xE + xCh[1] + xC);
+		s+="\n"+(xS + xCh[2] + xC);
+		s+=(For);
+		s+=(xE + xCh[2] + xC);
+		s+="\n"+(xS + xCh[3] + xC);
+		s+=(ton);
+		s+=(xE + xCh[3] + xC);
+		s+="\n"+(xS + xCh[4] + xC);
+		s+=(toff);
+		s+=(xE + xCh[4] + xC);
+		s+="\n"+(xS + xCh[5] + xC);
+		s+=(EleRate);
+		s+=(xE + xCh[5] + xC);
+		s+="\n"+(xS + xCh[6] + xC);
+		s+=(EleSupply);
+		s+=(xE + xCh[6] + xC);
+		s+="\n"+(xS + xCh[7] + xC);
+		s+=(savedE);
+		s+=(xE + xCh[7] + xC);
+		s+="\n"+(xS + xCh[8] + xC);
+		s+=(savedM);
+		s+=(xE + xCh[8] + xC);
+		s+="\n"+(xS + xCh[9] + xC);
+		s+=(date);
+		s+=(xE + xCh[9] + xC);
+		s+=(xE + xCh[0] + xC);
+		Serial.println(s);
+		file.close();
+		file = SPIFFS.open("/Data.xml", "w");
+		file.print(s);
+		file.close();
+		s=" ";
+		}
+	}
 	case 1:
 	{
 		File file = SPIFFS.open("/memmo.txt", "w");
@@ -200,6 +300,12 @@ void set()
 		RemT = ((millis() - CT) / x) * 100;
 		Serial.println(RemT);
 	}
+	double tonn = millis() - setP;
+	ton = tonn / (1000 * 60 * 60); // hr
+	toff = 24 - ton;
+	savedE = EleSupply * toff;
+	savedM = EleRate * EleSupply * toff;
+	wFile(0, " ");
 	x = For * 60 * 60 * 1000;
 	Serial.println(x);
 	CT = millis();
@@ -232,7 +338,7 @@ void hGot()
 		Serial.println("GOT");
 		GotData = server.arg("plain");
 		rFile("/Ok.html", 0);
-    delay(1000);
+   		delay(1000);
 		from = GotData.substring(GotData.indexOf("1=") + 2, GotData.indexOf("&")).toFloat(); // from1=00&for2=00
 		For = GotData.substring(GotData.indexOf("2=") + 2, GotData.indexOf("&T")).toFloat(); // from1=0.0&for2=8.0&Time
 		// from1=0.0&for2=8.0&d=16-06-2022&t=Sat+Jul+16+2022+15%3A10%3A02
@@ -266,18 +372,28 @@ void hUpdGot()
 			if (GotData.substring(GotData.indexOf(s[x]) + 6, GotData.indexOf(s[x + 1]) - 1) == "on")
 			{
 				scedule[x] = 1;
-             Serial.println(s[x]); 
 			}
 			else
 			{
 				scedule[x] = 0;
 			}
 		}
-		if (GotData.substring(GotData.indexOf("Check") + 6, GotData.indexOf("ElectricPrice") - 1) == "1111")
-		{
+		if (GotData.substring(GotData.indexOf("reset") + 6, GotData.length()) == "Y")
+			{
+				File file = SPIFFS.open("/Data.xml", "w");
+				file.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				file.println("<data>");
+				file.close();
+				Serial.println("Reset");
+			}
+			if (GotData.substring(GotData.indexOf("Check") + 6, GotData.indexOf("ElectricPrice") - 1) == "1111")
+			{
 			String z = GotData.substring(GotData.indexOf("SSID") + 5, GotData.indexOf("PWD") - 1);
-			String w = GotData.substring(GotData.indexOf("PWD") + 4, GotData.indexOf("reset") - 1);
+			String w = GotData.substring(GotData.indexOf("PWD") + 4, GotData.indexOf("ElectricPrice") - 1);
+			EleRate = GotData.substring(GotData.indexOf("Price") + 6, GotData.indexOf("ElectricSupply") - 1).toInt();
+			EleSupply = GotData.substring(GotData.indexOf("Supply") + 7, GotData.indexOf("SSID") - 1).toInt();
 			File file = SPIFFS.open("/const.txt", "w");
+			Serial.println(" ");
 			if (!w < 8)
 			{
 				file.print("//ssid//");
@@ -286,10 +402,14 @@ void hUpdGot()
 				file.print(w);
 				file.print("//end");
 			};
+			file.print("//EleR//");
+			file.print(EleRate);
+			file.print("//EleSuply//");
+			file.print(EleSupply);
+			file.print("//eend");
 			file.close();
 		}
 		Serial.println(GotData);
-		// for(int x=0;x<11;x++){Serial.print(scedule[x]);}
 		wFile(2, " ");
 		rFile("/Ok.html", 0);
 	}
@@ -305,6 +425,46 @@ void hSced()
 {
 	rFile("/Sced.js", 2);
 	Serial.println("js");
+}
+void hReportJs()
+{
+  rFile("/report.js", 2);
+  Serial.println("js");
+}
+void hDrawJs()
+{
+  rFile("/draw.js", 2);
+  Serial.println("js");
+}
+void hTonToffJs()
+{
+  rFile("/tontoff.js", 2);
+  Serial.println("js");
+}
+void hUsageDataJs()
+{
+  rFile("/UsageData.js", 2);
+  Serial.println("js");
+}
+void hSavingsDataJs()
+{
+  rFile("/SavingsData.js", 2);
+  Serial.println("js");
+}
+void hSendJs()
+{
+  rFile("/send.js", 2);
+  Serial.println("js");
+}
+void hData()
+{
+  rFile("/Data.xml", 4);
+  Serial.println("js");
+}
+void hRep()
+{
+  rFile("/report.html", 0);
+  Serial.println("js");
 }
 void hNF()
 {
@@ -322,6 +482,14 @@ void handleRequest()
 	server.on("/", hIndex);
 	server.on("/indexjs", hIndexJs);
 	server.on("/Sced", hScedJs);
+  	server.on("/reportjs", hReportJs);
+  	server.on("/draw", hDrawJs);
+  	server.on("/tontoff", hTonToffJs);
+  	server.on("/UsageData", hUsageDataJs);
+  	server.on("/SavingsData", hSavingsDataJs);
+  	server.on("/send", hSendJs);
+  	server.on("/Data", hData);
+  	server.on("/rep/", hRep);
 	server.on("/sm/", hSM);
 	server.on("/abt/", hAbt);
 	server.on("/msg/", hMsg);
@@ -332,7 +500,7 @@ void handleRequest()
 	server.on("/css", hCss);
 	server.on("/scd", hSced);
 	server.on("/upd/a", hUpdGot);
-  server.on("/stat", hStat);
+	server.on("/stat", hStat);
 	server.onNotFound(hNF);
 }
 void getDate(){
@@ -352,7 +520,6 @@ void getDate(){
         //"datetime":"2022-07-17T11:09:39.686372+05:30
         x = x.substring(x.indexOf("datetime") + 22, x.indexOf("+05:30") - 10);
         timeScedM = x.substring(0, 3).toInt() * 60 + x.substring(3, 5).toInt();
-        Serial.println(".................................");
         Serial.println(timeScedM);
         flag=true;
       }
@@ -369,13 +536,13 @@ void getDate(){
   }}
 void setup()
 {
-	setp = millis();
+	setP=millis();
 	pinMode(pin, OUTPUT);
 	pinMode(led, OUTPUT);
 	pinMode(btn, INPUT);
 	digitalWrite(pin, HIGH);
 	Serial.begin(115200);
-  delay(3000);
+  	delay(3000);
 	SPIFFS.begin();
 	File file = SPIFFS.open("/const.txt", "r");
 	String s;
@@ -385,6 +552,8 @@ void setup()
 	}
 	ssid = s.substring(s.indexOf("ssid//") + 6, s.indexOf("//pwd"));
 	password = s.substring(s.indexOf("pwd//") + 5, s.indexOf("//end"));
+	EleRate = s.substring(s.indexOf("EleR//") + 6, s.indexOf("//EleSuply")).toInt();
+	EleSupply = s.substring(s.indexOf("EleSuply//") + 10, s.indexOf("//eend")).toInt();
 	file.close();
 	file = SPIFFS.open("/Sced.js", "r");
 	String ss;
@@ -399,30 +568,31 @@ void setup()
 	}
   for(int x=0;x<13;x++){scedule[x]=String(a[x]).toInt();}
 	file.close();
-	if (digitalRead(btn) == HIGH)
-	{
-		ap();
-	}
-	else
-	{
-		wifi();
-	}
- setupT=millis();
+	MDNS.begin("Wambo");
+	MDNS.addService("http","tcp", 80);
+	 if (digitalRead(btn) == HIGH)
+	 {
+	 	ap();
+	 }
+	 else
+	 {
+	 	wifi();
+	 }
+ ota();
+ startT=millis();
+ getDate();
  Serial.println("scedule");
  for(int x=0;x<12;x++){
   Serial.print(scedule[x]);
   }
-  Serial.println(" ");
-	handleRequest();
+ Serial.println(" ");
+ handleRequest();
 }
 void loop()
 {
-    refresh1=millis();
-    if((refresh1-setupT)>5*60*1000){
-      getDate(); 
-      setupT=millis();
-      }
 	server.handleClient();
+	MDNS.update();
+	ArduinoOTA.handle();
 	if(flag){
 	  int y=timeScedM+millis()/(1000*60);
   for(int x=0;x<13;x++){
@@ -431,6 +601,13 @@ void loop()
       if(x==12){getDate();}
       }
   }}
+  else{
+    refresh1=millis();
+    if(refresh1-startT>5*60*1000){
+      getDate();
+      startT=millis();
+      }
+    }
  if(stat){digitalWrite(pin,HIGH);}
  else{digitalWrite(pin,LOW);}
 }
