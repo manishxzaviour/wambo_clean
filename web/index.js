@@ -1,6 +1,6 @@
-import scedule from '/Sced';
+import scedule from './Sced.js';
 var d = new Date();
-var date=String(String((d.getDate()<10)?'0'+String(d.getDate()):d.getDate()))+'-'+String(((d.getMonth()+1<10)?'0'+String(d.getMonth()+1):d.getMonth()+1))+'-'+String(d.getFullYear());
+var date=String(String((d.getDate()<10)?'0'+String(d.getDate()):d.getDate()))+'-'+String(((d.getMonth()<10)?'0'+String(d.getMonth()):d.getMonth())+1)+'-'+String(d.getFullYear());
 document.getElementById("d").value=date;
 function refT() {
   var ref = String(new Date());
@@ -72,8 +72,9 @@ function Do() {
       document.getElementById("wrapper2").style = "display:block;height:20px;width:100px";
       document.getElementById("wrapper2").innerHTML = "<a href=\"/rep/\" class=\"genericText\">Report</a>";
   } else {
-    let y=document.createElement("script");
-      y.src="/reportjs";
+    document.getElementById("bdy").style = "overflow: hidden;";
+      let y=document.createElement("script");
+      y.src="./report.js";
       document.body.appendChild(y);
   }
 }

@@ -1,12 +1,13 @@
+
 <html>
 	<head>
 		<title>wambo</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="/css">
+		<link rel="stylesheet" type="text/css" href="./index.css">
 		<script type="module" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" async></script>
-		<script type="module" src="/indexjs" async></script>
-		<script type="module" src="/Sced" async></script>
-		<script src="/send" async></script>
+		<script type="module" src="./index.js"	 async></script>
+		<script type="module" src="./Sced.js" async></script>
+		<script src="./send.js" async></script>
 		<style>
 			#titlle {float:right;margin:0px 10px;background-color:rgba(255,185,25,80%);border-radius:15px;padding:7px;}
 			#titlle li{display:inline-block; padding:0px 5px;padding-top:4px;}
@@ -33,28 +34,28 @@
 	</head>
 	<body id="bdy">
 		<div class="hdder">
-			<h2 align="center"><a href="/"class="hdderWrapper">WamBo</a></h2>
+			<h2 align="center"><a href="./index.html"class="hdderWrapper">WamBo</a></h2>
 			<ul id="titlle" class="shadowLight">
-				<li id="mp"><a href="/sm/"style="font-size: 20px;" class="hdderWrapper">SM</a></li>
-				<li><a href='/abt/' class="hdderWrapper" style="font-size: 20px;">ABT</a></li>
+				<li id="mp"><a href="./map.html"style="font-size: 20px;" class="hdderWrapper">SM</a></li>
+				<li><a href='./abt.html' class="hdderWrapper" style="font-size: 20px;">ABT</a></li>
 			</ul>
 		</div>
 		<div id="wrapper">
 		<ul id="subt">
-			<li class="shadowLight"><a id="msg" href="/msg/" class="hdderWrapper" style="font-size: 20px;">MSG</a></li>
+			<li class="shadowLight"><a id="msg" href="./memmo.html" class="hdderWrapper" style="font-size: 20px;">MSG</a></li>
 		</ul>
 		</div>
 		<div id="container2">
-		<form name="f1" action="/wambo" method="post" onsubmit="return(check());">
+		<form name="f1" action="/wambo" onsubmit="return(check());">
 				<table id="input" border="3px" class="shadowLight">
 					<tr>
 						<th>
-						    <label>From:&nbsp;</label><input list="selF" type="number" step="any" min="0.0001" name="from1" id="fromIP" style="width:50%;" placeholder="0.001" value="0.001" >
-							<datalist id="selF" >
+						    <label>From:&nbsp;</label><input type="number" step="any" list="selF" name="from1" id="fromIP" style="width:50%;" placeholder="0.0" min="0.0001" value="0.0">
+							<datalist id="selF">
 							</datalist>
 					</th></tr>
-					<tr><td>&nbsp;</td><td><input type="submit"  value="&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;" id="send"></td></tr>
-					<tr><th><label>&nbsp;For:&nbsp;&nbsp;&nbsp;</label><input list="selF" type="number" step="any" min="0.0001" name="for2" id="forIP" placeholder="8.0" value="8.0" style="width:50%;" ></th></tr>
+					<tr><td>&nbsp;</td><td><input type="submit"  value="&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;" id="send" ></td></tr>
+					<tr><th><label>&nbsp;For:&nbsp;&nbsp;&nbsp;</label><input type="number" step="any" min="0.0001" list="selF" name="for2" id="forIP"   placeholder="8.0" value="8.0" style="width:50%;"></th></tr>
 				</table>
 				<div id="container" align="center">
 					<table border="2px" border-color="silver"style="border-style: dotted" class="genericText" id="scedT">
@@ -69,8 +70,9 @@
 				</div>
 		</div>	
 		<input id="d" type="text" name="d" style="display: none;">
-		<input id="time" type="text" name="t" class="shadowLight genericText" disabled="true">
-		<a href="/upd/" id="updi" class="hdderWrapper" style="height: 25px;">^</a>			
+		<input id="time" type="text" class="shadowLight genericText" disabled="true">
+		<a href="./upd.html" id="updi" class="hdderWrapper" style="height: 25px;">^</a>			
 	</form>
 	</body>
+	</script>
 </html>
